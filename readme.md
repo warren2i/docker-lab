@@ -18,7 +18,7 @@
    
 
 ### Finding the entry point.
-The WPScan CLI tool is a free, for non-commercial use, black box WordPress security scanner written for security professionals and blog maintainers to test the security of their sites. The WPScan CLI tool uses our database of 38,274 WordPress vulnerabilities.
+> The WPScan CLI tool is a free, for non-commercial use, black box WordPress security scanner written for security professionals and blog maintainers to test the security of their sites. The WPScan CLI tool uses our database of 38,274 WordPress vulnerabilities.
 
 ![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/1.png?raw=true)
 
