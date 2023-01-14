@@ -158,7 +158,7 @@ Let's try to login… Success. But we are not admin. This far we have only teste
  
  
  
-### Finding the nonce.
+### Finding the cookie & nonce.
 
 > Let's talk about what buddypress tries to achieve. “BuddyPress helps you build any kind of community website using WordPress, with member profiles, activity streams, user groups, messaging, and more.”
 
@@ -167,7 +167,7 @@ We are going to exploit the groups function to try and obtain the WP-Nonce
 
 
 
-Let's check the groups for the nonce?
+Let's check the groups to see if we can find a cookie & nonce that will grant enhanced permissions?
  
  
 Lets create a group
