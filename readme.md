@@ -1,6 +1,6 @@
-Privilege Escalation via REST API Leading to Docker Container Escape Lab Writeup
-(time required 30 mins - 60 mins)
-A lab by Warren Atkinson
+# Privilege Escalation via REST API Leading to Docker Container Escape Lab Writeup
+## (time required 30 mins - 60 mins)
+### A lab by Warren Atkinson
 
 
 BuddyPress is an open source WordPress plugin to build a community site. In releases of BuddyPress from 5.0.0 before 7.2.1 it's possible for a non-privileged, regular user to obtain administrator rights by exploiting an issue in the REST API members endpoint. The vulnerability has been fixed in BuddyPress 7.2.1. Existing installations of the plugin should be updated to this version to mitigate the issue.
@@ -20,7 +20,10 @@ Getting a shell from wordpress
 Enumeration to find Linux elevation vector
 Docker container escape
 
-Finding the entry point.
+
+
+
+### Finding the entry point.
 The WPScan CLI tool is a free, for non-commercial use, black box WordPress security scanner written for security professionals and blog maintainers to test the security of their sites. The WPScan CLI tool uses our database of 38,274 WordPress vulnerabilities.
 
 ![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/1.png?raw=true)
@@ -43,7 +46,8 @@ The only poc I could find out in the wild was a python script that automates the
 
 
 
-Creating a user account with auth bypass
+
+### Creating a user account with auth bypass
 /buddypress/v1/signup is the endpoint to create a user account
 
 We will craft a request to create an account.
@@ -157,7 +161,10 @@ Let's try to login… Success. But we are not admin. This far we have only teste
 ![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/6.png?raw=true)
 ![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/7.png?raw=true)
  
-Finding the nonce.
+ 
+ 
+ 
+### Finding the nonce.
 
 Let's talk about what buddypress tries to achieve.
 
@@ -273,7 +280,7 @@ Reverse shell connects to the attacker, now we run the whoami command to get the
  
  
 
-Priv esc
+### Linux priv esc
 
 
 First let's  get a list of users by reading the contents of the passwd file
@@ -362,7 +369,9 @@ whoami to check current user
 ![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/16.png?raw=true)
 
 
-What is outside of the box?
+ 
+ 
+## What is outside of the box?
  
 ![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/17.png?raw=true)
  
