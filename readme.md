@@ -2,7 +2,7 @@
 ## (time required 30 mins - 60 mins)
 ### A lab by Warren Atkinson
 
-### A wordpress website with outdate vulnrable plugin leading to authentication bypass & rce, webhost machine takeover leading to container breakout to host.
+### A wordpress website with outdated vulnerable plugins leading to authentication bypass & rce, web host machine takeover leading to container breakout to host.
 
 
 ### Subjects covered
@@ -273,7 +273,7 @@ Reverse shell connects to the attacker, now we run the whoami command to get the
  
  
 
-### Linux priv esc
+### Linux priv escape
 
 
 First let's  get a list of users by reading the contents of the passwd file
