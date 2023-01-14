@@ -4,14 +4,6 @@
 
 ### A wordpress website with outdate vulnrable plugin leading to authentication bypass & rce, webhost machine takeover leading to container breakout to host.
 
-> BuddyPress is an open source WordPress plugin to build a community site. In releases of BuddyPress from 5.0.0 before 7.2.1 it's possible for a non-privileged, regular user to obtain administrator rights by exploiting an issue in the REST API members endpoint. The vulnerability has been fixed in BuddyPress 7.2.1. Existing installations of the plugin should be updated to this version to mitigate the issue.
-
-
-https://developer.buddypress.org/bp-rest-api/
-
-The buddy press api has everything you need to know about how to interact with the api.
-
-
 
 ### Subjects covered
 + API manipulation
