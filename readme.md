@@ -30,7 +30,7 @@ But it can't find this vulnerability, this highlights why tools shouldnt be reli
 
 A quick google for buddypress + vulnerabilities revealed the following cve. https://www.cvedetails.com/cve/CVE-2021-21389/
 
-BuddyPress is an open source WordPress plugin to build a community site. In releases of BuddyPress from 5.0.0 before 7.2.1 it's possible for a non-privileged, regular user to obtain administrator rights by exploiting an issue in the REST API members endpoint. The vulnerability has been fixed in BuddyPress 7.2.1. Existing installations of the plugin should be updated to this version to mitigate the issue.
+> BuddyPress is an open source WordPress plugin to build a community site. In releases of BuddyPress from 5.0.0 before 7.2.1 it's possible for a non-privileged, regular user to obtain administrator rights by exploiting an issue in the REST API members endpoint. The vulnerability has been fixed in BuddyPress 7.2.1. Existing installations of the plugin should be updated to this version to mitigate the issue.
 
 The target is running version 7, it should be vulnerable.
  
