@@ -49,6 +49,7 @@ Creating a user account with auth bypass
 We will craft a request to create an account.
 
 Let's craft the request.
+
 '''
 POST /wp-json/buddypress/v1/signup HTTP/1.1
 HOST: 192.168.0.16:7006
