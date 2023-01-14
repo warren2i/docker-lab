@@ -1,0 +1,88 @@
+---
+version: "3"
+
+services:
+
+  traefik:
+    image: "traefik:v2.9"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:7006"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+
+  wordpress:
+    privileged: true
+    image: warren2i/wordpress:v.03
+    restart: always
+    ports:
+      - 7006:80
+      - 8443:443
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'AUTOMATIC_UPDATER_DISABLED', true );
+        define( 'FS_METHOD', 'direct' );
+    volumes:
+      - wordpress:/var/www/html
+      - ./init/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+
+  mysql:
+    image: warren2i/mysql:v.03
+    restart: always
+    command: --init-file /docker-entrypoint-initdb.d/init.sql
+    volumes:
+        - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+        - mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
+  linux:
+    privileged: true
+    image: antsala/hello_container
+    restart: always
+    volumes:
+        - linux:/etc
+
+
+  wordpress-cli:
+    image: wordpress:cli
+    depends_on:
+      - mysql
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+    entrypoint: sh
+    command: -c 'sleep 10; wp core install --url="http://3.134.106.148:7006/" --title="greatname" --admin_name=admin --admin_password="mysupersecureadminpw" --admin_email=my@domain.com'; -c 'wp plugin delete hello'
+
+
+volumes:
+  wordpress: null
+  mysql: null
+  linux: null
